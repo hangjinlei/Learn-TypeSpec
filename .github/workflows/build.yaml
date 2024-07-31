@@ -1,0 +1,28 @@
+name: Build
+run-name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+      - name: Install TSP
+        run: npm install -g @typespec/compiler
+      - name: Install TSP Dependencies
+        run: tsp install
+      - name: Build
+        run: tsp compile .
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: tsp-output/@typespec/openapi3/
